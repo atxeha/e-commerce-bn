@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String  @id @default(cuid())
+
+  firstName   String
+  lastName    String?
+  phoneNumber BigInt?
+
+  role        ROLE    @default(BUYER)
+  email       String  @unique
+  password    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart         Cart?
+  itemsForSale Item[] @relation("UserItems")
+
+  shop   Shop[]
+
+  homeAddress UserAddress[]
+}
+
+model UserAddress {
+  id String @id @default(cuid())
+
+  street String?
+  barangay String
+  city String
+  province String
+  zipCode String
+
+  addressType String
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+enum ROLE {
+  BUYER
+  SELLER
+  RIDER
+  ADMIN
+}
+
+model Cart {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  items  Item[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Item {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  quantity    Int
+  category    String?
+  imageUrl    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id])
+
+  sellerId String
+  seller   User   @relation("UserItems", fields: [sellerId], references: [id])
+}
+
+model Shop {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  location    String?
+  imageUrl    String?
+
+  rating     Float?  @default(0.0)
+  isOpen     Boolean @default(true)
+  isVerified Boolean @default(false)
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
