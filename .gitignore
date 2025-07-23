@@ -1,0 +1,16 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+/src/generated/prisma
+prisma/migrations/
+# Ignore local development database
+dev.db
+# Ignore logs
+logs
+*.log
+# Ignore temporary files
+*.tmp
+*.temp
+# Ignore build artifacts
+dist    
