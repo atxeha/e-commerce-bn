@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from './client.js';
 import { encryptPassword } from '../utils/passwordHasher.js';
 import { validateName, validatePhone, validateEmail, validatePassword, validateAddresses, convertBigInt } from '../utils/validators.js';
 
-const prisma = new PrismaClient();
 
 export async function createUser(reqData, res) {
     const { firstName, lastName, phoneNumber, role, email, password, addresses } = reqData;

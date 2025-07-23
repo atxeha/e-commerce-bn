@@ -1,7 +1,4 @@
 import { createUser } from '../prisma_/registerNewUser.js';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
 
 export class IndexController {
     constructor() {
