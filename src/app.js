@@ -1,20 +1,21 @@
-import express, { json, urlencoded } from 'express';
+import express, { urlencoded } from 'express';
 import  setRoutes  from './routes/index.js';
 import dotenv from 'dotenv';
-import authRoutes from './auth/login.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import cors from 'cors'; 
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Middlewares
+app.use(cors()); 
 app.use(express.json());
-app.use('/auth', authRoutes);
+
 app.use(urlencoded({ extended: true }));
 
-// Set up routes
+// Routes
 setRoutes(app);
 
 app.listen(PORT, () => {

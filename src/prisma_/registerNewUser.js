@@ -1,6 +1,6 @@
 import prisma from './client.js';
 import { encryptPassword } from '../utils/passwordHasher.js';
-import { validateName, validatePhone, validateEmail, validatePassword, validateAddresses, convertBigInt } from '../utils/validators.js';
+import { validateName, validatePhone, validateEmail, validatePassword, validateAddresses} from '../utils/validators.js';
 
 
 export async function createUser(reqData, res) {
