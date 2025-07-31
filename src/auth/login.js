@@ -1,4 +1,4 @@
-// auth.js
+
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -9,8 +9,10 @@ dotenv.config();
 
 const router = express.Router();
 
-router.post('/login', async (req, res) => {
+router.post('/user-login', async (req, res) => {
   const { email, password } = req.body;
+
+  console
 
   if (!email || !password)
     return res.status(400).json({ message: 'Email and password required.' });
@@ -22,16 +24,17 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
+    // Issue JWT
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: '1h' }
+      { expiresIn: '30d' }
     );
 
     res.json({ accessToken: token });
