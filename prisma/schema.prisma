@@ -22,7 +22,9 @@ model User {
 
   role        ROLE    @default(BUYER)
   email       String  @unique
-  password    String
+  password    String?
+  provider    String @default("credentials")
+  externalId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -57,16 +59,6 @@ enum ROLE {
   ADMIN
 }
 
-model Cart {
-  id     String @id @default(cuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-  items  Item[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Item {
   id          String  @id @default(cuid())
   name        String
@@ -79,11 +71,21 @@ model Item {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cartId String
-  cart   Cart   @relation(fields: [cartId], references: [id])
+  cartId String?
+  cart   Cart?   @relation(fields: [cartId], references: [id])
 
   sellerId String
   seller   User   @relation("UserItems", fields: [sellerId], references: [id])
+}
+
+model Cart {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  items  Item[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Shop {
